@@ -151,6 +151,33 @@ it("Un turno completo con ataque", function(){
 
    });
 
+   //Condición de fin (se queda sin cartas)
+    it("El juego termina cuando el usuario se queda sin cartas en el mazo", function(){
+
+    usr1.turno=new MiTurno();
+    usr2.turno=new NoMiTurno();
+
+    for (var i=0; i<usr1.mazo.length-5;i++){
+        usr1.pasarTurno();
+        usr2.pasarTurno();
+    }
+    expect(usr1.turno.meToca()).toEqual(false);
+    expect(usr2.turno.meToca()).toEqual(false);
+     });
+
+    it("El juego termina si las vidas de un usuario sean 0", function(){
+    usr1.turno=new MiTurno();
+    usr2.turno=new NoMiTurno();
+    usr2.vidas=1;
+
+    var carta1=usr1.localizarCarta(1);
+    if(carta1){
+      usr1.jugarCarta(carta1);
+      usr1.ataque(carta1,usr2);
+      expect(usr1.turno.meToca()).toEqual(false);
+      expect(usr1.turno.meToca()).toEqual(false);
+    }
+  });
 
 
 
