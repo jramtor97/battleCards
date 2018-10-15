@@ -26,14 +26,16 @@ describe("El juego de las cartas...", function() {
     expect(usr2.mazo.length).toEqual(30);
     });
 
-    it("Los usuarios tiene mano (inicialmente sin cartas)", function(){
+    it("Los usuarios tiene mano (5 o 6 cartas)", function(){
       var cont=0;
       for(var i=0;i<usr1.mazo.length;i++){
         if (usr1.mazo[i].posicion=="mano"){
           cont++
         }
       }
-      expect(cont).toBeGreaterThanOrEqual(5);
+      //expect(cont).toBeGreaterThanOrEqual(5);
+      expect(cont).toBeGreaterThan(4);
+      expect(cont).toBeLessThan(7);
     });
 
    it("agregar pepe y juan el usuario al juego", function(){
