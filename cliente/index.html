@@ -1,18 +1,21 @@
-
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Card Battle</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 	<script src="./src/modelo.js"></script>
 </head>
 <body>
 	<script>
-	juego = new Juego();
-	usr1 = new Usuario("Sandra");
-	usr2 = new Usuario("Juan");
-	juego.agregarUsuario(usr1);
-	juego.agregarUsuario(usr2);
-	usr1.crearPartida("prueba");
-	usr2.eligePartida("prueba");
+		juego=new Juego();
+		//juego.crearUsuario("pepe");
+		//juego.crearUsuario("juan");
+		usr1=new Usuario("pepe");
+		usr2=new Usuario("juan");
+		juego.agregarUsuario(usr1);
+		juego.agregarUsuario(usr2);
+		usr1.crearPartida("prueba");
+		usr2.eligePartida("prueba");
 	</script>
 </body>
 </html>
