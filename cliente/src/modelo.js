@@ -9,6 +9,7 @@ function Juego(){
 		usuario.mazo=_.shuffle(this.crearColeccion());
 		usuario.juego=this;
 		this.usuarios.push(usuario);
+		usuario.id=this.usuarios.length-1;
 	}
 	this.crearColeccion=function(){
 		var mazo=[];
@@ -139,7 +140,7 @@ function MiTurno(){
 	this.cambiarTurno=function(usr){
 		usr.turno=new NoMiTurno();
 		usr.elixir=usr.consumido+1;
-		usr.consumido=0.
+		usr.consumido=0;
 	}
 	this.meToca=function(){
 		return true;
@@ -151,8 +152,8 @@ function MiTurno(){
 }
 
 function NoMiTurno(){
-	this.esMiTurno = function(usr){
-		//console.log("Ahora te toca");
+	this.esMiTurno=function(usr){
+		console.log("Ahora te toca");
 		usr.turno=new MiTurno();
 		usr.cogerCarta();
 	}
@@ -214,12 +215,13 @@ function Usuario(nombre){
 		carta= this.mazo.find(function(each){
 			return each.posicion=="mazo";
 		});
-		if(carta){
+		if (carta){
 			carta.posicion="mano";
-		}else{
+		}
+		else
+		{
 			this.partida.finPartida();
 		}
-		
 	}
 	this.jugarCarta=function(carta){
 		this.turno.jugarCarta(this,carta);
@@ -234,12 +236,18 @@ function Usuario(nombre){
 			console.log("No tienes suficiente elixir");
 	}
 	this.ataque=function(carta,objetivo){
-		objetivo.esAtacado(carta);
+		if(!carta.haAtacado){
+			objetivo.esAtacado(carta);
+			carta.haAtacado=true;
+			this.comprobarCartasAtaque();
+		}else{
+			console.log("Esta carta ya ha atacado");
+			this.comprobarCartasAtaque();
+		}
 	}
 	this.esAtacado=function(carta){
 		this.vidas=this.vidas-carta.ataque;
 		this.comprobarVidas();
-
 	}
 	this.comprobarVidas=function(){
 		if (this.vidas<=0){
@@ -256,7 +264,48 @@ function Usuario(nombre){
 			return each.posicion=="mano" && each.coste==coste;
 		});
 	}
+	this.obtenerUnaCarta=function(){
+		return this.mazo.find(function(each){
+			return each.posicion=="mano";
+		});
+	}
+	this.obtenerUnaCarta=function(){
+		return this.mazo.find(function(each){
+			return each.posicion=="mano";
+		});	
+	}
+	this.obtenerCartasAtaque=function(){
+		return this.mazo.filter(function(each){
+			return each.posicion=="ataque";
+		});
+	}
+	this.comprobarCartasAtaque=function(){
+		var carta;
+		var cartasAtaque;
+		cartasAtaque= this.obtenerCartasAtaque();
+		if (cartasAtaque){
+			carta=cartasAtaque.find(function(each){
+				return !each.haAtacado;
+			});
+			if (carta==undefined){
+				this.pasarTurno();
+				this.ponerNoHaAtacado();
+			}
+		}
+	}
+	this.ponerNoHaAtacado=function(){
+		_.each(this.obtenerCartasAtaque(),function(item){
+			item.haAtacado=false;
+		})
+	}
+	this.obtenerCartasMano=function(){
+		return this.mazo.filter(function(each){
+			return each.posicion=="mano";
+		});
+	}
+
 }
+
 
 function Carta(nombre,vidas,ataque,coste){
 	this.vidas=vidas;
@@ -264,9 +313,10 @@ function Carta(nombre,vidas,ataque,coste){
 	this.nombre=nombre;
 	this.coste=coste;
 	this.posicion="mazo";
+	this.haAtacado=false;
 	this.esAtacado=function(carta){
 		this.vidas=this.vidas-carta.ataque;
-		carta.vidas = carta.vidas - this.ataque;
+		carta.vidas=carta.vidas-this.ataque;
 		this.comprobarVidas();
 		carta.comprobarVidas();
 	}
