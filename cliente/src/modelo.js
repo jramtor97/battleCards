@@ -264,7 +264,7 @@ function Usuario(nombre){
 			return each.posicion=="mano" && each.coste==coste;
 		});
 	}
-	this.obtenerUnaCarta=function(){
+	this.obtenerUnaCarta = function(){
 		return this.mazo.find(function(each){
 			return each.posicion=="mano";
 		});
